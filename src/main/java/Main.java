@@ -85,7 +85,7 @@ public class Main {
                             int chosenTipSystem = scanner.nextInt();
                             if (chosenTipSystem != 3) {
                                 if (chosenLevel == 3){
-                                    points = useTipsSequence(chosenTipSystem, secretNumberSequence, userNumberSequence, MaxLimitNumbers, points);
+                                    points = useTipsSequence(scanner, chosenTipSystem, secretNumberSequence, userNumberSequence, MaxLimitNumbers, points);
                                 } else {
                                     points = useSystemTips(chosenTipSystem, userNumber, secretNumber, MaxLimitNumbers, points);
                                 }
@@ -229,34 +229,37 @@ public class Main {
         return points;
     }
 
-    public static int useTipsSequence(int chosenTipSystem, int[] secretNumberSequence, int[] userNumberSequence , int MaxLimitNumbers, int points){
-        Scanner scanner = new Scanner(System.in);
-
+    public static int useTipsSequence(Scanner scanner, int chosenTipSystem, int[] secretNumberSequence, int[] userNumberSequence , int MaxLimitNumbers, int points){
         System.out.printf("Qual posição da sequência você quer usar a dica? (1 a %d)", secretNumberSequence.length);
         int indexPosition = scanner.nextInt() - 1;
 
-        int secretValue = secretNumberSequence[indexPosition];
-        int userValue = userNumberSequence[indexPosition];
-
-        if (secretValue == userValue) {
-            System.out.println("Você acertou o valor dessa posição");
+        if (indexPosition < 0 || indexPosition > 2) {
+            System.out.println("Posição incorreta!");
         } else {
-            if (chosenTipSystem == 0) {
-                System.out.println(secretValue % 2 == 0 ? "O número é par" : "O número é impar");
-                points -= 10;
-            } else if (chosenTipSystem == 1) {
-                int metade = MaxLimitNumbers / 2;
-                System.out.println(secretValue <= metade ? "Está na metade inferior" : "Está na metade superior");
-                points -= 20;
-            } else if (chosenTipSystem == 2) {
-                int margemQuente= MaxLimitNumbers / 10;
-                int distancia = Math.abs(secretValue - userValue);
-                System.out.println(distancia <= margemQuente ? "Está quente" : "Está frio");
-                points -= 15;
+            int secretValue = secretNumberSequence[indexPosition];
+            int userValue = userNumberSequence[indexPosition];
+
+            if (secretValue == userValue) {
+                System.out.println("Você acertou o valor dessa posição");
             } else {
-                System.out.println("Opção incorreta!");
+                if (chosenTipSystem == 0) {
+                    System.out.println(secretValue % 2 == 0 ? "O número é par" : "O número é impar");
+                    points -= 10;
+                } else if (chosenTipSystem == 1) {
+                    int half = MaxLimitNumbers / 2;
+                    System.out.println(secretValue <= half ? "Está na metade inferior" : "Está na metade superior");
+                    points -= 20;
+                } else if (chosenTipSystem == 2) {
+                    int hotMargin= MaxLimitNumbers / 10;
+                    int distance = Math.abs(secretValue - userValue);
+                    System.out.println(distance <= hotMargin ? "Está quente" : "Está frio");
+                    points -= 15;
+                } else {
+                    System.out.println("Opção incorreta!");
+                }
             }
         }
+
         return points;
     }
 
